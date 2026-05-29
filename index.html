@@ -1,0 +1,510 @@
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>نجم الدين همادي - منصة تعليمية</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+font-family:'Cairo',sans-serif;
+box-sizing:border-box;
+}
+
+body{
+background:#f3f6ff;
+}
+
+.card{
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.hidden-scroll::-webkit-scrollbar{
+display:none;
+}
+
+</style>
+
+</head>
+
+<body class="p-4">
+
+<div class="max-w-7xl mx-auto bg-white rounded-[30px] shadow-2xl overflow-hidden border">
+
+<div class="grid lg:grid-cols-[280px_1fr]">
+
+<!-- SIDEBAR -->
+
+<aside class="bg-yellow-50 p-5 border-l">
+
+<div class="bg-white rounded-3xl p-5 shadow-lg text-center">
+
+<div class="w-36 h-36 mx-auto rounded-full overflow-hidden border-8 border-yellow-300 shadow-xl">
+
+<img
+src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png"
+class="w-full h-full object-cover"
+>
+
+</div>
+
+<h1 class="text-3xl font-black text-blue-800 mt-4">
+نجم الدين همادي
+</h1>
+
+<p class="text-red-500 font-bold mt-2">
+التعليم هو مفتاح المستقبل
+</p>
+
+</div>
+
+<div class="mt-5 space-y-3">
+
+<button class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-lg shadow">
+🏠 الرئيسية
+</button>
+
+<button class="w-full bg-green-600 text-white py-4 rounded-2xl font-black text-lg shadow">
+📚 المواد
+</button>
+
+</div>
+
+</aside>
+
+<!-- MAIN -->
+
+<main class="p-6 bg-gradient-to-br from-blue-50 to-green-50">
+
+<h1 id="level-title"
+class="text-5xl font-black text-green-700 text-center mb-8">
+✨ السنة الأولى ✨
+</h1>
+
+<!-- SEARCH -->
+
+<div class="bg-white rounded-3xl p-4 shadow-lg mb-8">
+
+<input
+type="text"
+id="search-input"
+placeholder="🔍 ابحث عن مادة..."
+class="w-full border-2 border-blue-200 rounded-2xl py-4 px-5 outline-none text-lg font-bold"
+/>
+
+</div>
+
+<!-- LEVEL BUTTONS -->
+
+<div class="flex gap-3 overflow-x-auto pb-4 hidden-scroll mb-8">
+
+<button onclick="renderSubjects('السنة الأولى')"
+class="bg-green-600 text-white px-5 py-3 rounded-2xl font-black whitespace-nowrap">
+السنة الأولى
+</button>
+
+<button onclick="renderSubjects('السنة الثانية')"
+class="bg-white px-5 py-3 rounded-2xl font-black whitespace-nowrap shadow">
+السنة الثانية
+</button>
+
+<button onclick="renderSubjects('السنة الثالثة')"
+class="bg-white px-5 py-3 rounded-2xl font-black whitespace-nowrap shadow">
+السنة الثالثة
+</button>
+
+<button onclick="renderSubjects('السنة الرابعة')"
+class="bg-white px-5 py-3 rounded-2xl font-black whitespace-nowrap shadow">
+السنة الرابعة
+</button>
+
+<button onclick="renderSubjects('السنة الخامسة')"
+class="bg-white px-5 py-3 rounded-2xl font-black whitespace-nowrap shadow">
+السنة الخامسة
+</button>
+
+<button onclick="renderSubjects('السنة السادسة')"
+class="bg-white px-5 py-3 rounded-2xl font-black whitespace-nowrap shadow">
+السنة السادسة
+</button>
+
+</div>
+
+<!-- SUBJECTS -->
+
+<div
+id="subjects-container"
+class="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+</div>
+
+</main>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { createClient }
+from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+
+/* =========================
+SUPABASE
+========================= */
+
+const SUPABASE_URL =
+'https://wsrwidfvcrmppayfbqel.supabase.co';
+
+const SUPABASE_KEY =
+'sb_publishable_ujQvwUEUXp7_-enFhO2awQ_hoJHa6Mg';
+
+const BUCKET = 'school-files';
+
+const supabase = createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
+
+/* =========================
+ELEMENTS
+========================= */
+
+const subjectsContainer =
+document.getElementById('subjects-container');
+
+const levelTitle =
+document.getElementById('level-title');
+
+const searchInput =
+document.getElementById('search-input');
+
+/* =========================
+SUBJECTS
+========================= */
+
+const subjectsByLevel = {
+
+'السنة الأولى':[
+'الرياضيات',
+'اللغة العربية',
+'الإيقاظ العلمي'
+],
+
+'السنة الثانية':[
+'الرياضيات',
+'اللغة العربية',
+'الإيقاظ العلمي'
+],
+
+'السنة الثالثة':[
+'الرياضيات',
+'اللغة العربية',
+'الفرنسية',
+'الإيقاظ العلمي'
+],
+
+'السنة الرابعة':[
+'الرياضيات',
+'اللغة العربية',
+'الفرنسية',
+'الإيقاظ العلمي'
+],
+
+'السنة الخامسة':[
+'الرياضيات',
+'اللغة العربية',
+'الفرنسية',
+'الإيقاظ العلمي'
+],
+
+'السنة السادسة':[
+'الرياضيات',
+'اللغة العربية',
+'الفرنسية',
+'الإيقاظ العلمي'
+]
+
+};
+
+/* =========================
+CARD
+========================= */
+
+function createCard(subject,color){
+
+return `
+
+<div class="card bg-white rounded-[30px] p-5 shadow-xl border">
+
+<h2 class="text-4xl font-black ${color} mb-5">
+${subject}
+</h2>
+
+<div class="space-y-4">
+
+<div class="bg-blue-50 rounded-2xl p-4">
+
+<div class="flex justify-between items-center">
+
+<h3 class="font-black text-blue-700">
+📘 الدروس
+</h3>
+
+<button class="upload-btn bg-blue-600 text-white px-4 py-2 rounded-xl font-bold">
+رفع
+</button>
+
+</div>
+
+</div>
+
+<div class="bg-yellow-50 rounded-2xl p-4">
+
+<div class="flex justify-between items-center">
+
+<h3 class="font-black text-yellow-700">
+📝 التمارين
+</h3>
+
+<button class="upload-btn bg-yellow-500 text-white px-4 py-2 rounded-xl font-bold">
+رفع
+</button>
+
+</div>
+
+</div>
+
+<div class="bg-red-50 rounded-2xl p-4">
+
+<div class="flex justify-between items-center">
+
+<h3 class="font-black text-red-700">
+📄 الاختبارات
+</h3>
+
+<button class="upload-btn bg-red-600 text-white px-4 py-2 rounded-xl font-bold">
+رفع
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+/* =========================
+RENDER
+========================= */
+
+window.renderSubjects = function(level){
+
+levelTitle.innerText = `✨ ${level} ✨`;
+
+subjectsContainer.innerHTML = '';
+
+let search =
+searchInput.value.trim();
+
+const subjects =
+subjectsByLevel[level]
+.filter(subject =>
+subject.includes(search)
+);
+
+subjects.forEach(subject=>{
+
+let color = 'text-blue-700';
+
+if(subject === 'الرياضيات'){
+color = 'text-indigo-700';
+}
+
+if(subject === 'اللغة العربية'){
+color = 'text-green-700';
+}
+
+if(subject === 'الإيقاظ العلمي'){
+color = 'text-orange-700';
+}
+
+if(subject === 'الفرنسية'){
+color = 'text-pink-700';
+}
+
+subjectsContainer.innerHTML +=
+createCard(subject,color);
+
+});
+
+attachUploadEvents();
+
+}
+
+/* =========================
+SEARCH
+========================= */
+
+searchInput.addEventListener('input',()=>{
+
+const level =
+levelTitle.innerText
+.replace('✨','')
+.replace('✨','')
+.trim();
+
+renderSubjects(level);
+
+});
+
+/* =========================
+UPLOAD
+========================= */
+
+function attachUploadEvents(){
+
+document
+.querySelectorAll('.upload-btn')
+.forEach(button=>{
+
+button.onclick = null;
+
+button.addEventListener(
+'click',
+()=>{
+
+const input =
+document.createElement('input');
+
+input.type = 'file';
+
+input.accept = `
+.pdf,
+.doc,
+.docx,
+.png,
+.jpg,
+.jpeg,
+.mp4
+`;
+
+input.onchange = async(e)=>{
+
+const file =
+e.target.files[0];
+
+if(!file) return;
+
+button.disabled = true;
+
+button.innerText =
+'جاري الرفع...';
+
+try{
+
+const subjectName =
+button
+.closest('.card')
+.querySelector('h2')
+.textContent
+.trim();
+
+const folderName =
+button
+.parentElement
+.querySelector('h3')
+.textContent
+.trim();
+
+const fileName = `
+${Date.now()}-${file.name}
+`;
+
+const path = `
+${subjectName}/${folderName}/${fileName}
+`.replace(/\s+/g,'');
+
+const { error } =
+await supabase.storage
+.from(BUCKET)
+.upload(
+path,
+file,
+{
+upsert:true,
+contentType:file.type
+}
+);
+
+if(error){
+
+alert(error.message);
+
+button.disabled = false;
+
+button.innerText = 'رفع';
+
+return;
+
+}
+
+alert('تم رفع الملف بنجاح');
+
+button.disabled = false;
+
+button.innerText = 'رفع';
+
+}
+catch(err){
+
+console.error(err);
+
+alert('فشل رفع الملف');
+
+button.disabled = false;
+
+button.innerText = 'رفع';
+
+}
+
+};
+
+input.click();
+
+});
+
+});
+
+}
+
+/* =========================
+START
+========================= */
+
+renderSubjects('السنة الأولى');
+
+</script>
+
+</body>
+
+</html>
+```
